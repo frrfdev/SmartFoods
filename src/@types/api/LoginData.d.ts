@@ -1,5 +1,5 @@
 export interface LoginDataApi {
   UserName: string;
   Password: string;
-  access_type: string;
+  grant_type: string;
 }

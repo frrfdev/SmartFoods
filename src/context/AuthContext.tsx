@@ -4,9 +4,9 @@ import { useMutation } from "@tanstack/react-query";
 import type { ResponseErrorData } from "../@types/RequestErrorData";
 import { useErrorContext } from "./ErrorContext";
 import { useRouter } from "next/router";
-import { ENDPOINTS } from "../services/endpoints";
 import type { UserData } from "../@types/UserData";
 import { ROUTES } from "../constants/routes";
+import { ENDPOINTS } from "../services/endpoints";
 
 export interface AuthContextProps {
   user: UserData | null;
@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const { isLoading, mutate } = useMutation({
-    mutationFn: async (loginData: LoginData) => {
+    mutationFn: async (loginData: LoginData): Promise<UserData> => {
       const response = await ENDPOINTS.login(loginData);
       return response.data;
     },

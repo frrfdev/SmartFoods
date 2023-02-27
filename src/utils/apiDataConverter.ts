@@ -8,7 +8,7 @@ export const Converter = {
   apiRequest: {
     loginDataToLoginDataApi(loginData: LoginData): LoginDataApi {
       return {
-        access_type: loginData.accessType,
+        grant_type: loginData.accessType,
         UserName: loginData.email,
         Password: loginData.password,
       };

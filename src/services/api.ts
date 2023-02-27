@@ -6,7 +6,7 @@ export const api = axios.create({
     // Authorization: `Bearer ${
     //   typeof window !== "undefined" ? localStorage.getItem("token") : ""
     // }`,
-    "Access-Control-Allow-Origin": "*",
+    // "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/x-www-form-urlencoded",
   },
 });
