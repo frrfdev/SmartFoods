@@ -10,50 +10,13 @@ import {
 import { BiDotsHorizontal } from "react-icons/bi";
 import { Pagination } from "./Pagination/Pagination";
 import { useQuery } from "@tanstack/react-query";
-import type { SaleData } from "../../@types/SaleData";
+import type { OrderData } from "../../@types/OrderData";
 import { useRouter } from "next/router";
 import { Table } from "../Table/Table";
 import { StatusTag } from "../StatusTag/StatusTag";
 import { Formatter } from "../../utils/formatter";
-
-const mockData: { data: SaleData[]; pageCount: number } = {
-  data: [
-    {
-      user: {
-        name: "John Doe",
-      },
-      id: 1,
-      value: 1000,
-      date: "09/08/2022",
-      status: {
-        name: "Finalizado",
-      },
-    },
-    {
-      user: {
-        name: "John Doe",
-      },
-      id: 1,
-      value: 1500,
-      date: "19/08/2022",
-      status: {
-        name: "Cancelado",
-      },
-    },
-    {
-      user: {
-        name: "John Doe",
-      },
-      id: 1,
-      value: 1010,
-      date: "09/09/2022",
-      status: {
-        name: "Pendente",
-      },
-    },
-  ],
-  pageCount: 3,
-};
+import { ordersApi } from "../../mocks/api";
+import type { OrdersFilterData } from "../../@types/OrdersFilterData";
 
 const getStatusTagStatuses = (status: string) => {
   switch (status) {
@@ -66,28 +29,25 @@ const getStatusTagStatuses = (status: string) => {
   }
 };
 
-const columnHelper = createColumnHelper<SaleData>();
+const columnHelper = createColumnHelper<OrderData>();
 
 export const SalesTable = () => {
   const router = useRouter();
 
-  const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>({
-      pageIndex: 0,
-      pageSize: 10,
-    });
-
-  const fetchDataOptions = {
-    pageIndex,
-    pageSize,
-  };
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [filter, setFilter] = React.useState<OrdersFilterData>({
+    statusId: "",
+  });
 
   const handleOpenOrder = (id: string) => {
     router.push(`/orders/${id}`);
   };
 
   const columns = [
-    columnHelper.accessor("user.name", {
+    columnHelper.accessor("userName", {
       cell: (info) => (
         <strong
           className="flex min-w-min items-center gap-2"
@@ -118,7 +78,7 @@ export const SalesTable = () => {
       cell: (info) => <span className="text-gray-400">{info.getValue()}</span>,
       header: () => <span>Data</span>,
     }),
-    columnHelper.accessor("status.name", {
+    columnHelper.accessor("statusName", {
       cell: (info) => {
         return (
           <StatusTag status={getStatusTagStatuses(info.getValue())}>
@@ -138,23 +98,16 @@ export const SalesTable = () => {
     }),
   ];
 
-  const fetchData = (pagination: PaginationState) => mockData;
+  const fetchData = (pag: PaginationState, filt: OrdersFilterData) =>
+    ordersApi.getOrders(pag.pageIndex, pag.pageSize, filt);
 
   const dataQuery = useQuery({
-    queryKey: ["data", fetchDataOptions],
-    queryFn: () => fetchData(fetchDataOptions),
-    keepPreviousData: true,
+    queryKey: ["data", pagination, filter],
+    queryFn: () => fetchData(pagination, filter),
+    keepPreviousData: false,
   });
 
   const defaultData = React.useMemo(() => [], []);
-
-  const pagination = React.useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize]
-  );
 
   const table = useReactTable({
     data: dataQuery.data?.data ?? defaultData,
@@ -170,7 +123,7 @@ export const SalesTable = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <Filter />
+      <Filter setFilter={setFilter} filter={filter} />
       <Table table={table}></Table>
       <Pagination table={table} />
       {dataQuery.isFetching ? "Loading..." : null}

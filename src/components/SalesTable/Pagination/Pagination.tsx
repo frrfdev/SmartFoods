@@ -1,6 +1,6 @@
 import type { Table } from "@tanstack/react-table";
 import React from "react";
-import type { SaleData } from "../../../@types/SaleData";
+import type { OrderData } from "../../../@types/OrderData";
 import {
   FaBackward,
   FaCaretLeft,
@@ -13,9 +13,10 @@ type PageButtonProps = React.DetailedHTMLProps<
   HTMLButtonElement
 >;
 
-const PageButton = ({ children }: PageButtonProps) => {
+const PageButton = ({ children, ...rest }: PageButtonProps) => {
   return (
     <button
+      {...rest}
       className={`flex h-8 w-8 cursor-pointer  items-center justify-center rounded-full bg-gray-200 text-gray-500 hover:border-2 hover:border-red-600 hover:bg-white hover:text-red-600`}
     >
       {children}
@@ -24,7 +25,7 @@ const PageButton = ({ children }: PageButtonProps) => {
 };
 
 export interface PaginationProps {
-  table: Table<SaleData>;
+  table: Table<OrderData>;
 }
 
 export const Pagination = ({ table }: PaginationProps) => {

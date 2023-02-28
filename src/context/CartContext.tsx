@@ -79,29 +79,26 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const increaseProductQuantity = (cartProductId: string) => {
+  const increaseProductQuantity = (cartProductId: string) =>
+    updateProductQuantity(cartProductId, "add");
+  const decreaseProductQuantity = (cartProductId: string) =>
+    updateProductQuantity(cartProductId, "subtract");
+
+  const updateProductQuantity = (
+    cartProductId: string,
+    method: "add" | "subtract"
+  ) => {
     const productIndex = products.findIndex((p) => p.id === cartProductId);
 
     if (productIndex !== -1) {
       const newProducts = [...products];
       const foundProduct = newProducts[productIndex];
       if (foundProduct) {
-        foundProduct.quantity += 1;
-        setProducts(newProducts);
-      }
-    }
-  };
-
-  const decreaseProductQuantity = (cartProductId: string) => {
-    const productIndex = products.findIndex((p) => p.id === cartProductId);
-
-    if (productIndex !== -1) {
-      const newProducts = [...products];
-      const foundProduct = newProducts[productIndex];
-      if (foundProduct) {
-        foundProduct.quantity -= 1;
-        if (foundProduct.quantity <= 0) {
-          newProducts.splice(productIndex, 1);
+        if (method === "add") {
+          foundProduct.quantity += 1;
+        } else {
+          foundProduct.quantity -= 1;
+          if (foundProduct.quantity <= 0) newProducts.splice(productIndex, 1);
         }
         setProducts(newProducts);
       }

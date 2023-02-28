@@ -7,6 +7,8 @@ import type { CategoryDataApi } from "../@types/api/CategoryData";
 import type { CategoryFormProps } from "../components/CategoryForm/CategoryForm.types";
 import type { UserFormProps } from "../components/UserForm/UserForm.types";
 import { Converter } from "../utils/apiDataConverter";
+import type { PaginationData } from "../@types/PaginationData";
+import type { OrderData } from "../@types/OrderData";
 
 export const ENDPOINTS = {
   login: async (loginData: LoginData) =>
@@ -16,6 +18,9 @@ export const ENDPOINTS = {
         Converter.apiRequest.loginDataToLoginDataApi(loginData)
       )
     ),
+  order: {
+    index: async () => api.get<PaginationData<OrderData>>(API_ROUTES.ORDER),
+  },
   category: {
     index: async () => api.get<Array<CategoryDataApi>>(API_ROUTES.CATEGORY),
     show: async (id: string) =>

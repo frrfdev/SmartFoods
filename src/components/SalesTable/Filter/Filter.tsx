@@ -1,35 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "../../Button/Button";
 import { useSelected } from "../../../hooks/utils/useSelected";
+import type { OrdersFilterData } from "../../../@types/OrdersFilterData";
 
-export const Filter = () => {
-  const { handleSelect, selected, isSelected } = useSelected("all");
+type FilterProps = {
+  setFilter: (filter: OrdersFilterData) => void;
+  filter: OrdersFilterData;
+};
 
-  const handleAllClick = () => {
-    //all function
-    handleSelect("all");
-  };
+export const Filter = ({ setFilter, filter }: FilterProps) => {
+  const { handleSelect, isSelected, selected } = useSelected("");
 
-  const handleFinishedClick = () => {
-    //all function
-    handleSelect("finished");
-  };
+  const handleAllClick = () => handleSelect("");
 
-  const handlePendingClick = () => {
-    //all function
-    handleSelect("pending");
-  };
+  const handleFinishedClick = () => handleSelect("1");
 
-  const handleCanceledClick = () => {
-    //all function
-    handleSelect("canceled");
-  };
+  const handlePendingClick = () => handleSelect("3");
+
+  const handleCanceledClick = () => handleSelect("2");
+
+  useEffect(() => {
+    setFilter({ ...filter, statusId: selected || "" });
+  }, [selected, setFilter, filter]);
 
   return (
     <div className="flex gap-1 lg:gap-2">
       <Button
         size="sm"
-        isActive={isSelected("all")}
+        isActive={isSelected("")}
         status="secondary-outline"
         onClick={handleAllClick}
       >
@@ -37,7 +35,7 @@ export const Filter = () => {
       </Button>
       <Button
         size="sm"
-        isActive={isSelected("finished")}
+        isActive={isSelected("1")}
         status="secondary-outline"
         onClick={handleFinishedClick}
       >
@@ -45,7 +43,7 @@ export const Filter = () => {
       </Button>
       <Button
         size="sm"
-        isActive={isSelected("pending")}
+        isActive={isSelected("3")}
         status="secondary-outline"
         onClick={handlePendingClick}
       >
@@ -53,7 +51,7 @@ export const Filter = () => {
       </Button>
       <Button
         size="sm"
-        isActive={isSelected("canceled")}
+        isActive={isSelected("2")}
         status="secondary-outline"
         onClick={handleCanceledClick}
       >
