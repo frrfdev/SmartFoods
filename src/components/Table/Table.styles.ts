@@ -7,5 +7,5 @@ export const defaultClasses = {
   thead: "w-full border-b-2 border-gray-100",
   th: "table-cell py-4 px-4 text-left",
   tr: "border-b-2 border-gray-100 last:border-none",
-  td: "table-cell w-full whitespace-nowrap py-6 px-4",
+  td: "table-cell w-full whitespace-nowrap py-6 px-4 flex justify-center items-center",
 } as TableClasses;

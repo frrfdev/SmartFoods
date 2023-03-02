@@ -7,10 +7,10 @@ import { ProductCategory } from "../../components/ProductCategory/ProductCategor
 import { useSelected } from "../../hooks/utils/useSelected";
 import { useRouter } from "next/router";
 import type { ProductData } from "../../@types/ProductData";
-import { ProductPreviewModal } from "../../components/ProductPreviewModal/ProductPreviewModal";
-import { ProductComboModal } from "../../components/ProductComboModal/ProductComboModal";
 import { PrivateComponent } from "../../components/PrivateComponent/PrivateComponent";
 import { useAuthContext } from "../../context/AuthContext";
+import { ProductPreviewModal } from "../../components/ProductPreviewModal/ProductPreviewModal";
+import { ProductComboModal } from "../../components/ProductComboModal/ProductComboModal";
 
 export const Products = () => {
   const router = useRouter();
@@ -44,19 +44,21 @@ export const Products = () => {
         <ProductCategory onClick={handleSelectCombo} />
       </div>
 
-      {user ? (
-        <ProductPreviewModal
-          product={selectedCombo}
-          open={!!selectedCombo}
-          onClose={() => setSelectedCombo(undefined)}
-        ></ProductPreviewModal>
-      ) : (
-        <ProductComboModal
-          product={selectedCombo}
-          open={!!selectedCombo}
-          onClose={() => setSelectedCombo(undefined)}
-        ></ProductComboModal>
-      )}
+      {selectedCombo ? (
+        user ? (
+          <ProductPreviewModal
+            product={selectedCombo}
+            open={!!selectedCombo}
+            onClose={() => setSelectedCombo(undefined)}
+          ></ProductPreviewModal>
+        ) : (
+          <ProductComboModal
+            product={selectedCombo}
+            open={!!selectedCombo}
+            onClose={() => setSelectedCombo(undefined)}
+          ></ProductComboModal>
+        )
+      ) : null}
     </PrivatePage>
   );
 };

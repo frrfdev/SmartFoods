@@ -16,7 +16,7 @@ export const ProductPreviewModal = ({
       }}
       maxWidth="lg"
     >
-      <ProductCard variant="preview"></ProductCard>
+      <ProductCard variant="preview" product={product}></ProductCard>
     </Dialog>
   );
 };

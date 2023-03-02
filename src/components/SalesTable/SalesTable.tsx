@@ -7,7 +7,6 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { BiDotsHorizontal } from "react-icons/bi";
 import { Pagination } from "./Pagination/Pagination";
 import { useQuery } from "@tanstack/react-query";
 import type { OrderData } from "../../@types/OrderData";
@@ -17,6 +16,9 @@ import { StatusTag } from "../StatusTag/StatusTag";
 import { Formatter } from "../../utils/formatter";
 import { ordersApi } from "../../mocks/api";
 import type { OrdersFilterData } from "../../@types/OrdersFilterData";
+import { ThreeDotMenu } from "../ThreeDotMenu/ThreeDotMenu";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { Button } from "../Button/Button";
 
 const getStatusTagStatuses = (status: string) => {
   switch (status) {
@@ -75,7 +77,11 @@ export const SalesTable = () => {
       header: () => <span>Valor</span>,
     }),
     columnHelper.accessor("date", {
-      cell: (info) => <span className="text-gray-400">{info.getValue()}</span>,
+      cell: (info) => (
+        <span className="text-gray-400">
+          {Formatter.dateTime(info.getValue())}
+        </span>
+      ),
       header: () => <span>Data</span>,
     }),
     columnHelper.accessor("statusName", {
@@ -90,9 +96,28 @@ export const SalesTable = () => {
     }),
     columnHelper.accessor("id", {
       cell: () => (
-        <span className="flex w-full cursor-pointer justify-end text-gray-400">
-          <BiDotsHorizontal size={22} />
-        </span>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild>
+            <div className="flex h-full w-full items-center justify-center">
+              <ThreeDotMenu></ThreeDotMenu>
+            </div>
+          </DropdownMenu.Trigger>
+
+          <DropdownMenu.Portal>
+            <DropdownMenu.Content
+              className="rounded-md bg-white py-2 px-1 shadow-md data-[state='open']:animate-fadein data-[state='closed']:animate-fadeout"
+              sideOffset={5}
+            >
+              <DropdownMenu.Item className="DropdownMenuItem">
+                <Button size="sm" status="text">
+                  Visualizar
+                </Button>
+              </DropdownMenu.Item>
+
+              <DropdownMenu.Arrow className="" />
+            </DropdownMenu.Content>
+          </DropdownMenu.Portal>
+        </DropdownMenu.Root>
       ),
       header: () => <span className="flex w-full justify-end">Action</span>,
     }),
@@ -120,6 +145,8 @@ export const SalesTable = () => {
     pageCount: dataQuery.data?.pageCount ?? -1,
     manualPagination: true,
   });
+
+  console.log("aaa");
 
   return (
     <div className="flex flex-col gap-6">

@@ -67,7 +67,6 @@ export const ProductComboModal = ({
     }
   };
 
-  // sum the total price of the selected flavors
   const totalFlavorsPrice = React.useMemo(() => {
     const total = flavorsSelected.reduce((acc, flavor) => {
       const flavorData = flavors.find(
@@ -90,10 +89,11 @@ export const ProductComboModal = ({
       }}
       maxWidth="lg"
     >
-      <h3 className="text-4xl">Pizza grande {"(Combo)"}</h3>
-      <span className="text-gray-400">
-        Chocolate ice cream sweet and mood booster
-      </span>
+      <h3 className="text-4xl">
+        {product?.title}
+        {"(Combo)"}
+      </h3>
+      <span className="text-gray-400">{product?.description}</span>
 
       <div className="mt-4">Borda e massa</div>
 
@@ -144,7 +144,7 @@ export const ProductComboModal = ({
 
       {!isUserAuthenticated ? (
         <div className="mt-4 flex flex-col gap-4">
-          <FieldGroup name="obs" label="Observações">
+          <FieldGroup label="Observações">
             <Input
               variant="outlined"
               textarea

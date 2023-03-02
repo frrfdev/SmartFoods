@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-const SlideRightLayout = ({ children }: { children: React.ReactNode }) => (
+const SlideRightTransition = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ x: 300, opacity: 0 }}
     animate={{ x: 0, opacity: 1 }}
@@ -16,4 +16,4 @@ const SlideRightLayout = ({ children }: { children: React.ReactNode }) => (
     {children}
   </motion.div>
 );
-export default SlideRightLayout;
+export default SlideRightTransition;

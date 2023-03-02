@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import React from "react";
 
-const FadeInLayout = ({ children }: { children: React.ReactNode }) => (
+const FadeInTransition = ({ children }: { children: React.ReactNode }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -16,4 +16,4 @@ const FadeInLayout = ({ children }: { children: React.ReactNode }) => (
     {children}
   </motion.div>
 );
-export default FadeInLayout;
+export default FadeInTransition;

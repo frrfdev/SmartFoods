@@ -21,7 +21,7 @@ export const Filter = ({ setFilter, filter }: FilterProps) => {
 
   useEffect(() => {
     setFilter({ ...filter, statusId: selected || "" });
-  }, [selected, setFilter, filter]);
+  }, [selected, JSON.stringify(filter)]);
 
   return (
     <div className="flex gap-1 lg:gap-2">

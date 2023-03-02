@@ -33,7 +33,7 @@ export const Radio = ({
         onChange={onChange}
         className={`h-[20px] w-[20px] text-red-600 disabled:bg-gray-200 ${
           disabled ? "cursor-not-allowed" : "cursor-pointer"
-        } accent-red-600 before:transition-all before:duration-1000`}
+        } accent-red-600 checked:animate-fadein`}
       />
     </div>
   );

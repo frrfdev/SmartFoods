@@ -3,14 +3,19 @@ import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import type { ProductCardProps } from "./ProductCard.types";
 import { variants } from "./ProductCard.styles";
+import { Formatter } from "../../utils/formatter";
 
-export const ProductCard = ({ variant, onClick }: ProductCardProps) => {
+export const ProductCard = ({
+  variant,
+  onClick,
+  product,
+}: ProductCardProps) => {
   const variantStyles = variants[variant || "default"];
 
   return (
     <div
       className={variantStyles.root}
-      onClick={() => onClick && onClick({} as any)}
+      onClick={() => onClick && onClick(product)}
     >
       <div className={variantStyles.imgWrapper}>
         {/* trocar por img */}
@@ -27,15 +32,15 @@ export const ProductCard = ({ variant, onClick }: ProductCardProps) => {
         </span>
       </div>
       <div className={variantStyles.infoContainer}>
-        <span className={variantStyles.productName}>Pizza Calabreza</span>
-        <span className={variantStyles.details}>
-          Alho poró orgânico da nossa própria horta, crem cheese Polenghi,
-          assada em forno à lenha e finalizados com manjericão fresco sadopajks
-          apdoska pdoaskdpoaskdasopkdpaosk daso dopas kdasok dpas
-        </span>
+        <span className={variantStyles.productName}>{product.title}</span>
+        <span className={variantStyles.details}>{product.description}</span>
         <div className={variantStyles.priceContainer}>
-          <strong className={variantStyles.promotionalPrice}>R$34,10</strong>
-          <strong className={variantStyles.finalPrice}>R$32,10</strong>
+          <strong className={variantStyles.promotionalPrice}>
+            {Formatter.brl(product.price)}
+          </strong>
+          <strong className={variantStyles.finalPrice}>
+            {Formatter.brl(product.promotionalPrice)}
+          </strong>
         </div>
       </div>
     </div>

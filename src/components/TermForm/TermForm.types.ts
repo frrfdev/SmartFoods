@@ -1,11 +1,11 @@
-export interface CategoryFormProps {
+export interface TermFormProps {
   termId: string;
   title: string;
   description: string;
   image: any;
 }
 
-export interface CategoryFormErrors {
+export interface TermFormErrors {
   termId?: string;
   title?: string;
   description?: string;

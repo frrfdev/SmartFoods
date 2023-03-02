@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik } from "formik";
 import { FieldGroup } from "../FormGroup/FormGroup";
-import type { CategoryFormProps } from "./TermForm.types";
+import type { TermFormProps } from "./TermForm.types";
 import { termFormValidator } from "./TermForm.validator";
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
@@ -15,7 +15,7 @@ const INITIAL_VALUES = {
   description: "",
   termId: "",
   image: undefined,
-} as CategoryFormProps;
+} as TermFormProps;
 
 export const CategoryForm = () => {
   return (
@@ -44,7 +44,6 @@ export const CategoryForm = () => {
           <h2 className="text-3xl">Cadastrar novo termo</h2>
           <FieldGroup
             label="Título"
-            name="title"
             errors={errors.title}
             touched={touched.title}
             isRequired
@@ -60,7 +59,6 @@ export const CategoryForm = () => {
           </FieldGroup>
           <FieldGroup
             label="Descrição"
-            name="description"
             errors={errors.description}
             isRequired
             touched={touched.description}
@@ -77,7 +75,6 @@ export const CategoryForm = () => {
 
           <FieldGroup
             label="Termo ascendente"
-            name="termId"
             touched={touched.termId}
             errors={errors.termId}
           >
