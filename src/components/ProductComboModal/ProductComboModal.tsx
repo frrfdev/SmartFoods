@@ -1,20 +1,12 @@
 import React from "react";
 import type { ProductComboModalProps } from "./ProductComboModal.types";
 import { Dialog } from "@mui/material";
-import { RadioGroup } from "../RadioGroup/RadioGroup";
-import { AdditionalRadioLabel } from "./AdditionalRadioLabel/AdditionalRadioLabel";
 import { useAuthContext } from "../../context/AuthContext";
 import { FlavorOption } from "./FlavorOption/FlavorOption";
 import { Input } from "../Input/Input";
 import { FieldGroup } from "../FormGroup/FormGroup";
 import { Button } from "../Button/Button";
-
-const additionals = [
-  { id: "1", name: "Borda de cheedar", price: 3.5 },
-  { id: "2", name: "Borda de catupiry", price: 3.5 },
-  { id: "3", name: "Borda de queijo", price: 3.5 },
-  { id: "4", name: "Borda de chocolate", price: 3.5 },
-];
+import { CategorySection } from "./CategorySection";
 
 const flavors = [
   {
@@ -95,33 +87,9 @@ export const ProductComboModal = ({
       </h3>
       <span className="text-gray-400">{product?.description}</span>
 
-      <div className="mt-4">Borda e massa</div>
-
-      <div className="mt-2 flex flex-col gap-4 rounded-md p-4 shadow-md">
-        {isUserAuthenticated ? (
-          additionals.map(({ name, price, id }) => (
-            <AdditionalRadioLabel name={name} price={price} key={id} />
-          ))
-        ) : (
-          <RadioGroup
-            onChange={(e) => {
-              console.log(e.target.value);
-            }}
-            optionsClassName="mb-2 last:mb-0"
-            options={additionals.map((additional) => ({
-              label: (
-                <AdditionalRadioLabel
-                  name={additional.name}
-                  price={additional.price}
-                />
-              ),
-              value: additional.id,
-              key: additional.id,
-              name: "borda",
-            }))}
-          ></RadioGroup>
-        )}
-      </div>
+      {product?.configs?.map((config) => (
+        <CategorySection key={config.id} config={config}></CategorySection>
+      )) ?? null}
 
       <div className="mt-4">Sabores</div>
       <div className="mt-2 flex flex-col gap-4 rounded-md p-4 shadow-md">

@@ -20,7 +20,11 @@ export const ProductCard = ({
       <div className={variantStyles.imgWrapper}>
         {/* trocar por img */}
         <Image
-          src="/images/product.jpg"
+          src={
+            product.images?.[0]
+              ? URL.createObjectURL(product.images?.[0])
+              : "/images/product.jpg"
+          }
           alt="Picture of the author"
           className="object-cover"
           fill
@@ -35,11 +39,17 @@ export const ProductCard = ({
         <span className={variantStyles.productName}>{product.title}</span>
         <span className={variantStyles.details}>{product.description}</span>
         <div className={variantStyles.priceContainer}>
-          <strong className={variantStyles.promotionalPrice}>
-            {Formatter.brl(product.price)}
-          </strong>
+          {product.promotionalPrice ? (
+            <strong className={variantStyles.promotionalPrice}>
+              {Formatter.brl(product.price)}
+            </strong>
+          ) : null}
           <strong className={variantStyles.finalPrice}>
-            {Formatter.brl(product.promotionalPrice)}
+            {Formatter.brl(
+              product.promotionalPrice
+                ? product.promotionalPrice
+                : product.price
+            )}
           </strong>
         </div>
       </div>

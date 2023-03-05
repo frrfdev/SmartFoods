@@ -3,4 +3,5 @@ export const API_ROUTES = {
   CATEGORY: `/api/categoria`,
   USER: `/api/usuario`,
   ORDER: `/api/pedido`,
+  TERM: `/api/termo`,
 };

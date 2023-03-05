@@ -1,10 +1,10 @@
 export interface TermData {
+  id: string;
   title: string;
   description: string;
-  categoryId: string;
-  category: {
+  termId: string;
+  term?: {
     name: string;
     id: string;
   };
-  image: any;
 }

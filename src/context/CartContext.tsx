@@ -31,9 +31,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       description: "Pizza de calabreza",
       price: 34.1,
       promotionalPrice: 32.1,
-      category_id: "pizza",
-      subcategory_id: "calabreza",
-      type_id: "pizza",
+      categoryId: "pizza",
+      subCategoryId: "calabreza",
+      typeId: "pizza",
       quantity: 1,
     },
   ]);

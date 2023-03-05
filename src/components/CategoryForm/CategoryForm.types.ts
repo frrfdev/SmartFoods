@@ -2,7 +2,7 @@ export interface CategoryFormProps {
   categoryId: string;
   title: string;
   description: string;
-  image: File[];
+  id?: string;
 }
 
 export interface CategoryFormErrors {

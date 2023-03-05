@@ -1,39 +1,43 @@
 import React from "react";
 import { Table } from "../Table/Table";
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useQuery } from "@tanstack/react-query";
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 
-import { columns } from "./TermList.columns";
+import { useTerms } from "../../hooks/api/useTerms";
+import type { TermData } from "../../@types/TermData";
 
-export const TermList = () => {
-  const categoriesQuery = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => {
-      return {
-        data: [
-          {
-            title: "Termo 1",
-            description: "Termo",
-          },
-          {
-            title: "Termo 2",
-            description: "Termo",
-          },
-          {
-            title: "Termo 3",
-            description: "Termo",
-          },
-          {
-            title: "Termo 4",
-            description: "Termo",
-          },
-        ],
-      };
-    },
-  });
+const columnHelper = createColumnHelper<TermData>();
+
+interface TermListProps {
+  handleEditTerm: (term: TermData) => void;
+}
+
+export const TermList = ({ handleEditTerm }: TermListProps) => {
+  const { data: terms } = useTerms();
+
+  const columns = [
+    columnHelper.accessor("title", {
+      cell: (info) => <span>{info.getValue()}</span>,
+      header: () => <span>Nome</span>,
+    }),
+    columnHelper.accessor("description", {
+      cell: (record) => (
+        <span
+          className="cursor-pointer text-gray-600"
+          onClick={() => handleEditTerm(record.row.original)}
+        >
+          Editar
+        </span>
+      ),
+      header: () => <span className="w-full text-right">Ação</span>,
+    }),
+  ];
 
   const table = useReactTable({
-    data: categoriesQuery.data?.data ?? [],
+    data: terms ?? [],
     columns: columns as never,
     getCoreRowModel: getCoreRowModel(),
   });

@@ -29,10 +29,21 @@ SelectItem.displayName = "SelectItem";
 export const Select = ({
   options,
   placeholder = "",
+  onValueChange,
   ...props
 }: SelectProps) => {
+  const getSelectedOption = (value: string) =>
+    options.find((option) => option.value === value);
+
   return (
-    <SelectRadix.Root {...props}>
+    <SelectRadix.Root
+      {...props}
+      onValueChange={(value) => {
+        const selectedOption = getSelectedOption(value);
+        if (onValueChange && selectedOption)
+          onValueChange(value, selectedOption);
+      }}
+    >
       <SelectRadix.Trigger
         className="flex h-[40px] items-center justify-between rounded-md border-2 border-gray-100 px-3 text-start"
         aria-label="Food"
@@ -56,7 +67,7 @@ export const Select = ({
               </SelectItem>
               {options.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  <span>{option.textValue}</span>
+                  <span>{option.label}</span>
                 </SelectItem>
               ))}
             </SelectRadix.Group>

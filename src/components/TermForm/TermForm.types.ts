@@ -2,7 +2,7 @@ export interface TermFormProps {
   termId: string;
   title: string;
   description: string;
-  image: any;
+  id?: string;
 }
 
 export interface TermFormErrors {

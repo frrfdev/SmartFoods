@@ -3,6 +3,8 @@ import type { LoginData } from "../@types/LoginData";
 import type { UserData } from "../@types/UserData";
 import type { LoginDataApi } from "../@types/api/LoginData";
 import type { UserDataApi } from "../@types/api/UserData";
+import type { TermDataApi } from "../@types/api/TermData";
+import type { TermData } from "../@types/TermData";
 
 export const Converter = {
   apiRequest: {
@@ -32,6 +34,23 @@ export const Converter = {
           profilePictureId: response.data.ID_FOTO,
           email: response.data.EMAIL,
         },
+      };
+    },
+    termDataApiIndexToTermData(
+      response: AxiosResponse<TermDataApi[]>
+    ): AxiosResponse<TermData[]> {
+      return {
+        ...response,
+        data: response.data.map((term) => ({
+          id: term.ID,
+          title: term.NOME,
+          description: term.DESCRICAO,
+          termId: term.ID_TERMO,
+          term: {
+            name: term.TERMO.NOME,
+            id: term.TERMO.ID,
+          },
+        })),
       };
     },
   },

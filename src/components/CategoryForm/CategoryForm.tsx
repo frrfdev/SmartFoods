@@ -6,8 +6,8 @@ import { categoryFormValidator } from "./CategoryForm.validator";
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import { Select } from "../Select/Select";
-import { Upload } from "../Upload/Upload";
 import { useCategory } from "../../hooks/api/useCategory";
+import type { CategoryData } from "../../@types/CategoryData";
 
 ("use client");
 
@@ -18,16 +18,27 @@ const INITIAL_VALUES = {
   image: [],
 } as CategoryFormProps;
 
-export const CategoryForm = () => {
-  const { storeCategory } = useCategory();
+interface Props {
+  categoryToEdit?: CategoryFormProps | CategoryData | null;
+  setCategoryToEdit: (term: CategoryData | null) => void;
+}
+
+export const CategoryForm = ({ categoryToEdit, setCategoryToEdit }: Props) => {
+  const { storeCategoryMutation, updateCategoryMutation } = useCategory();
+
+  const cancelEdit = () => setCategoryToEdit(null);
 
   return (
     <Formik
-      initialValues={INITIAL_VALUES}
+      initialValues={categoryToEdit || INITIAL_VALUES}
       validate={categoryFormValidator}
+      enableReinitialize
       onSubmit={async (values, { setSubmitting }) => {
-        await storeCategory(values);
+        setSubmitting(true);
+        if (categoryToEdit) await updateCategoryMutation.mutate(values);
+        else await storeCategoryMutation.mutate(values);
         setSubmitting(false);
+        setCategoryToEdit(null);
       }}
     >
       {({
@@ -37,7 +48,7 @@ export const CategoryForm = () => {
         handleChange,
         handleBlur,
         handleSubmit,
-        setFieldValue,
+        isSubmitting,
       }) => (
         <form
           onSubmit={handleSubmit}
@@ -46,7 +57,6 @@ export const CategoryForm = () => {
           <h2 className="text-3xl">Cadastrar nova categoria</h2>
           <FieldGroup
             label="Título"
-            name="title"
             errors={errors.title}
             touched={touched.title}
             isRequired
@@ -62,7 +72,6 @@ export const CategoryForm = () => {
           </FieldGroup>
           <FieldGroup
             label="Descrição"
-            name="description"
             errors={errors.description}
             touched={touched.description}
             isRequired
@@ -79,7 +88,6 @@ export const CategoryForm = () => {
 
           <FieldGroup
             label="Categoria ascendente"
-            name="categoryId"
             touched={touched.categoryId}
             errors={errors.categoryId}
           >
@@ -91,15 +99,19 @@ export const CategoryForm = () => {
             />
           </FieldGroup>
 
-          <Upload
-            value={values.image}
-            name="image"
-            onChange={(files) => setFieldValue("image", files)}
-          ></Upload>
-
-          <Button type="submit">
-            <span>Cadastrar</span>
+          <Button type="submit" disabled={isSubmitting}>
+            <span>{categoryToEdit ? "Editar" : "Cadastrar"}</span>
           </Button>
+          {categoryToEdit ? (
+            <Button
+              type="button"
+              status={"secondary"}
+              disabled={isSubmitting}
+              onClick={cancelEdit}
+            >
+              <span>Cancelar</span>
+            </Button>
+          ) : null}
         </form>
       )}
     </Formik>

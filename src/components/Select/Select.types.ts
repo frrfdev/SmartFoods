@@ -1,10 +1,8 @@
 import type * as Select from "@radix-ui/react-select";
-import type React from "react";
+import type { OptionData } from "../../@types/OptionData";
 
-export type SelectProps = Select.SelectProps & {
+export type SelectProps = Omit<Select.SelectProps, "onValueChange"> & {
   placeholder?: string;
-  options: {
-    value: string;
-    textValue: string | React.ReactNode;
-  }[];
+  onValueChange?: (value: string, option: OptionData) => void;
+  options: OptionData[];
 };

@@ -10,9 +10,5 @@ export const termFormValidator = (values: TermFormProps) => {
     errors.description = "Por favor, insira uma descrição";
   }
 
-  if (!values.termId) {
-    errors.termId = "Por favor, escolha um termo";
-  }
-
   return errors;
 };

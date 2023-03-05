@@ -1,5 +1,6 @@
 import React from "react";
 import type { RadioProps } from "./Radio.types";
+import crypto from "crypto";
 
 export const Radio = ({
   value,
@@ -9,7 +10,7 @@ export const Radio = ({
   onChange,
   className,
 }: RadioProps) => {
-  const id = crypto.randomUUID();
+  const id = crypto.randomBytes(20).toString("hex");
 
   return (
     <div

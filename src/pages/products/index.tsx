@@ -9,7 +9,6 @@ import { useRouter } from "next/router";
 import type { ProductData } from "../../@types/ProductData";
 import { PrivateComponent } from "../../components/PrivateComponent/PrivateComponent";
 import { useAuthContext } from "../../context/AuthContext";
-import { ProductPreviewModal } from "../../components/ProductPreviewModal/ProductPreviewModal";
 import { ProductComboModal } from "../../components/ProductComboModal/ProductComboModal";
 
 export const Products = () => {
@@ -46,11 +45,11 @@ export const Products = () => {
 
       {selectedCombo ? (
         user ? (
-          <ProductPreviewModal
+          <ProductComboModal
             product={selectedCombo}
             open={!!selectedCombo}
             onClose={() => setSelectedCombo(undefined)}
-          ></ProductPreviewModal>
+          ></ProductComboModal>
         ) : (
           <ProductComboModal
             product={selectedCombo}

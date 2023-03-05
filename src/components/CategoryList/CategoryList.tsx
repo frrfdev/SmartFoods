@@ -1,39 +1,43 @@
-import { getCoreRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import React from "react";
 
-import { columns } from "./CategoryList.columns";
-import { useQuery } from "@tanstack/react-query";
 import { Table } from "../Table/Table";
+import type { CategoryData } from "../../@types/CategoryData";
+import { useCategories } from "../../hooks/api/useCategories";
 
-export const CategoryList = () => {
-  const categoriesQuery = useQuery({
-    queryKey: ["categories"],
-    queryFn: () => {
-      return {
-        data: [
-          {
-            title: "Categoria 1",
-            description: "Categoria",
-          },
-          {
-            title: "Categoria 2",
-            description: "Categoria",
-          },
-          {
-            title: "Categoria 3",
-            description: "Categoria",
-          },
-          {
-            title: "Categoria 4",
-            description: "Categoria",
-          },
-        ],
-      };
-    },
-  });
+interface CategoryListProps {
+  handleEditCategory: (category: CategoryData) => void;
+}
+
+const columnHelper = createColumnHelper<CategoryData>();
+
+export const CategoryList = ({ handleEditCategory }: CategoryListProps) => {
+  const { data } = useCategories();
+
+  const columns = [
+    columnHelper.accessor("title", {
+      cell: (info) => <span>{info.getValue()}</span>,
+      header: () => <span>Nome</span>,
+    }),
+    columnHelper.accessor("description", {
+      cell: (record) => (
+        <span
+          className="cursor-pointer text-gray-600"
+          onClick={() => handleEditCategory(record.row.original)}
+        >
+          Editar
+        </span>
+      ),
+      header: () => <span className="w-full text-right">Ação</span>,
+    }),
+  ];
 
   const table = useReactTable({
-    data: categoriesQuery.data?.data ?? [],
+    data: data ?? [],
     columns: columns as never,
     getCoreRowModel: getCoreRowModel(),
   });

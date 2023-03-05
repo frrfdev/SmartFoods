@@ -1,9 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { ENDPOINTS } from "../../services/endpoints";
+import { categoriesApi } from "../../mocks/api";
 
 export const useCategories = () => {
   return useQuery({
     queryKey: ["categories"],
-    queryFn: ENDPOINTS.category.index,
+    queryFn: () => {
+      return categoriesApi.getCategories();
+      // return ENDPOINTS.category.index
+    },
   });
 };

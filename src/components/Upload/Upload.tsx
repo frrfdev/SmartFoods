@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import { useDropzone } from "react-dropzone";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import { FaTimes } from "react-icons/fa";
@@ -15,14 +15,20 @@ export const Upload = ({ value = [], name, onChange }: UploadProps) => {
 
   const controls = useAnimationControls();
 
+  const fileList = useMemo(() => {
+    return Array.isArray(value) ? value : value ? [value] : [];
+  }, [value]);
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       // Do something with the files
-      console.log([...value, ...acceptedFiles]);
-      // setFiles([...files, ...acceptedFiles]);
-      if (onChange) onChange([...value, ...acceptedFiles]);
+      if (fileList) {
+        console.log([...fileList, ...acceptedFiles]);
+        // setFiles([...files, ...acceptedFiles]);
+        if (onChange) onChange([...fileList, ...acceptedFiles]);
+      }
     },
-    [value, onChange]
+    [fileList, onChange]
   );
 
   const { getRootProps, getInputProps, fileRejections } = useDropzone({
@@ -31,16 +37,10 @@ export const Upload = ({ value = [], name, onChange }: UploadProps) => {
   });
 
   const handleRemove = (name: string) => {
-    const newFilesList = value.filter((file) => file.name !== name);
+    const newFilesList = fileList?.filter((file) => file.name !== name) ?? [];
     // setFiles(newFilesList);
     if (onChange) onChange(newFilesList);
   };
-
-  useEffect(() => {
-    if (value) {
-      console.log("value", value);
-    }
-  }, [value]);
 
   useEffect(() => {
     if (fileRejections.length)
@@ -78,32 +78,34 @@ export const Upload = ({ value = [], name, onChange }: UploadProps) => {
       </div>
 
       <div className="flex flex-wrap gap-2" ref={parent}>
-        {value?.map((file) => (
-          <div
-            key={file.name}
-            className="relative h-[200px] w-full overflow-hidden rounded-md"
-          >
-            <Image
-              alt="product image"
-              src={URL.createObjectURL(file)}
-              fill
-              placeholder="blur"
-              style={{ zIndex: 1, objectFit: "cover" }}
-              blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                convertImage(700, 475)
-              )}`}
-            ></Image>
-
-            <span
-              className="absolute right-1 top-1 z-10"
-              onClick={() => handleRemove(file.name)}
+        {fileList?.map((file) =>
+          file ? (
+            <div
+              key={file.name}
+              className="relative h-[200px] w-full overflow-hidden rounded-md"
             >
-              <Button size="sm">
-                <FaTimes />
-              </Button>
-            </span>
-          </div>
-        ))}
+              <Image
+                alt="product image"
+                fill
+                src={URL.createObjectURL(file)}
+                placeholder="blur"
+                style={{ zIndex: 1, objectFit: "cover" }}
+                blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                  convertImage(700, 475)
+                )}`}
+              ></Image>
+
+              <span
+                className="absolute right-1 top-1 z-10"
+                onClick={() => handleRemove(file.name)}
+              >
+                <Button size="sm">
+                  <FaTimes />
+                </Button>
+              </span>
+            </div>
+          ) : null
+        )}
       </div>
     </div>
   );

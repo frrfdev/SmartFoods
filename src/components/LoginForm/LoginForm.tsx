@@ -28,10 +28,8 @@ export const LoginForm = () => {
       initialValues={INITIAL_VALUES}
       validate={loginFormValidator}
       onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          handleLogin({ ...values, accessType: "password" });
-          setSubmitting(false);
-        }, 400);
+        handleLogin({ ...values, accessType: "password" });
+        setSubmitting(false);
       }}
     >
       {({

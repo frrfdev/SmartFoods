@@ -6,7 +6,8 @@ import { termFormValidator } from "./TermForm.validator";
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import { Select } from "../Select/Select";
-import { Upload } from "../Upload/Upload";
+import { useTerm } from "../../hooks/api/useTerm";
+import type { TermData } from "../../@types/TermData";
 
 ("use client");
 
@@ -14,18 +15,30 @@ const INITIAL_VALUES = {
   title: "",
   description: "",
   termId: "",
-  image: undefined,
 } as TermFormProps;
 
-export const CategoryForm = () => {
+interface Props {
+  termToEdit?: TermFormProps | TermData | null;
+  setTermToEdit: (term: TermData | null) => void;
+}
+
+export const TermForm = ({ termToEdit, setTermToEdit }: Props) => {
+  const { storeTermMutation, updateTermMutation } = useTerm();
+
+  const cancelEdit = () => setTermToEdit(null);
+
   return (
     <Formik
-      initialValues={INITIAL_VALUES}
+      initialValues={termToEdit || INITIAL_VALUES}
       validate={termFormValidator}
-      onSubmit={(values, { setSubmitting }) => {
-        setTimeout(() => {
-          setSubmitting(false);
-        }, 400);
+      enableReinitialize
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
+        setSubmitting(true);
+        if (termToEdit) await updateTermMutation.mutate(values);
+        else await storeTermMutation.mutate(values);
+        setSubmitting(false);
+        resetForm();
+        setTermToEdit(null);
       }}
     >
       {({
@@ -35,13 +48,16 @@ export const CategoryForm = () => {
         handleChange,
         handleBlur,
         handleSubmit,
+        isSubmitting,
         /* and other goodies */
       }) => (
         <form
           onSubmit={handleSubmit}
           className="flex w-full flex-col gap-5 pt-2 lg:pt-20"
         >
-          <h2 className="text-3xl">Cadastrar novo termo</h2>
+          <h2 className="text-3xl">
+            {termToEdit ? "Editar" : "Cadastrar novo"} termo
+          </h2>
           <FieldGroup
             label="Título"
             errors={errors.title}
@@ -86,15 +102,23 @@ export const CategoryForm = () => {
             />
           </FieldGroup>
 
-          <Upload></Upload>
-
-          <Button type="submit">
-            <span>Cadastrar</span>
+          <Button type="submit" disabled={isSubmitting}>
+            <span>{termToEdit ? "Editar" : "Cadastrar"}</span>
           </Button>
+          {termToEdit ? (
+            <Button
+              type="button"
+              status={"secondary"}
+              disabled={isSubmitting}
+              onClick={cancelEdit}
+            >
+              <span>Cancelar</span>
+            </Button>
+          ) : null}
         </form>
       )}
     </Formik>
   );
 };
 
-export default CategoryForm;
+export default TermForm;
